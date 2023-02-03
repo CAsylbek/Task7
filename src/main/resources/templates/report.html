@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Report</title>
+</head>
+<body>
+<h1>Meters</h1>
+<th:block th:each="meter : ${meters}">
+    <div>
+        <p th:text="'ID: ' + ${meter.id}"></p>
+        <p th:text="'Name: ' + ${meter.name}"></p>
+        <p th:text="'GroupId: ' + ${meter.meterGroup.id}"></p>
+        <p th:text="'GroupName: ' + ${meter.meterGroup.name}"></p>
+        <hr>
+    </div>
+</th:block>
+
+<h1>MeterGroups</h1>
+<th:block th:each="meterGroup : ${meterGroups}">
+    <div>
+        <p th:text="'ID: ' + ${meterGroup.id}"></p>
+        <p th:text="'Name: ' + ${meterGroup.name}"></p>
+        <hr>
+    </div>
+</th:block>
+
+<h1>MeterReadings</h1>
+<th:block th:each="meterReading : ${meterReadings}">
+    <div>
+        <p th:text="'ID: ' + ${meterReading.id}"></p>
+        <p th:text="'MinReading: ' + ${meterReading.minReading}"></p>
+        <p th:text="'MaxReading: ' + ${meterReading.maxReading}"></p>
+        <p th:text="'Consumption: ' + ${meterReading.consumption}"></p>
+        <p th:text="'MeterId: ' + ${meterReading.meter.id}"></p>
+        <p th:text="'MeterName: ' + ${meterReading.meter.name}"></p>
+        <hr>
+    </div>
+</th:block>
+</body>
+</html>
