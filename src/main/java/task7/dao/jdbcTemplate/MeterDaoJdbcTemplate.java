@@ -1,72 +1,65 @@
 package task7.dao.jdbcTemplate;
 
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Component;
-import task7.dao.mapper.MeterMapper;
+import task7.dao.mapper.MeterExtractor;
 import task7.model.Meter;
 
-import javax.sql.DataSource;
 import java.util.List;
-import java.util.Map;
 
 @Component
 public class MeterDaoJdbcTemplate {
 
     private JdbcTemplate jdbcTemplate;
-    private BeanPropertyRowMapper beanPropertyRowMapper;
-    private MeterMapper meterMapper;
+    private NamedParameterJdbcTemplate namedJdbcTemplate;
+    private MeterExtractor meterExtractor;
 
     public MeterDaoJdbcTemplate(JdbcTemplate jdbcTemplate,
-                                MeterMapper meterMapper) {
+                                NamedParameterJdbcTemplate namedParameterJdbcTemplate,
+                                MeterExtractor meterExtractor) {
         this.jdbcTemplate = jdbcTemplate;
-        this.beanPropertyRowMapper = new BeanPropertyRowMapper(Meter.class);
-        this.meterMapper = meterMapper;
+        this.namedJdbcTemplate = namedParameterJdbcTemplate;
+        this.meterExtractor = meterExtractor;
     }
 
 
     public Meter save(Meter meter) {
-        //todo: авто установка id
-        String query = "insert into meter(id, name, meter_group) values (?, ?, ?)";
+        String query = "insert into meter(name, meter_group) values (?, ?)";
         Object[] args = new Object[]{
-             meter.getId(),
-             meter.getName(),
+             meter.getType(),
              meter.getMeterGroup().getId()};
         int out = jdbcTemplate.update(query, args);
         if (out != 0) {
             return meter;
         }
         return null;
-        //todo: вместо null можно вызывать исключение
     }
 
     public List<Meter> getAll() {
         String query = "select id, name, meter_group from meter";
-        return jdbcTemplate.query(query, meterMapper);
-
-//        List<Map<String, Object>> list = jdbcTemplate.queryForList(query);
-//
-//        return list.stream().map(map -> {
-//            Meter meter = new Meter();
-//            meter.setId(Long.parseLong(String.valueOf(map.get("id"))));
-//            meter.setName(String.valueOf(map.get("name")));
-//            meter.setGroupId(Long.parseLong(String.valueOf(map.get("group_id"))));
-//            return meter;
-//        }).toList();
+        return jdbcTemplate.query(query, meterExtractor);
     }
 
     public Meter getById(Long id) {
-        String query = "select id, name, meter_group from meter where id=?";
-        Meter meter = (Meter)jdbcTemplate.queryForObject(query, meterMapper, id);
-        return meter;
+        String query = "select * from meter where id=?";
+        return jdbcTemplate.query(query, meterExtractor, id)
+             .stream().findFirst().orElse(null);
+    }
+
+    public List<Meter> getListByIds(List<Long> ids) {
+        SqlParameterSource parameterSource = new MapSqlParameterSource("ids", ids);
+        String query = "select * from meter where id in(:ids)";
+        return namedJdbcTemplate.query(query, parameterSource, meterExtractor);
     }
 
     public Meter update(Meter meter) {
-        String query = "update meter set id=? ,name=?, meter_group=?";
+        String query = "update meter set id=? ,type=?, meter_group=?";
         Object[] args = new Object[]{
              meter.getId(),
-             meter.getName(),
+             meter.getType(),
              meter.getMeterGroup().getId()};
         int out = jdbcTemplate.update(query, args);
         if (out != 0) {

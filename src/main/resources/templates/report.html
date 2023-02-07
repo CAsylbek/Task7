@@ -4,38 +4,39 @@
     <meta charset="UTF-8">
     <title>Report</title>
 </head>
+<style>
+    td {
+    border: 1px solid black;
+    }
+</style>
 <body>
-<h1>Meters</h1>
-<th:block th:each="meter : ${meters}">
-    <div>
-        <p th:text="'ID: ' + ${meter.id}"></p>
-        <p th:text="'Name: ' + ${meter.name}"></p>
-        <p th:text="'GroupId: ' + ${meter.meterGroup.id}"></p>
-        <p th:text="'GroupName: ' + ${meter.meterGroup.name}"></p>
-        <hr>
-    </div>
-</th:block>
-
-<h1>MeterGroups</h1>
-<th:block th:each="meterGroup : ${meterGroups}">
-    <div>
-        <p th:text="'ID: ' + ${meterGroup.id}"></p>
-        <p th:text="'Name: ' + ${meterGroup.name}"></p>
-        <hr>
-    </div>
-</th:block>
-
-<h1>MeterReadings</h1>
-<th:block th:each="meterReading : ${meterReadings}">
-    <div>
-        <p th:text="'ID: ' + ${meterReading.id}"></p>
-        <p th:text="'MinReading: ' + ${meterReading.minReading}"></p>
-        <p th:text="'MaxReading: ' + ${meterReading.maxReading}"></p>
-        <p th:text="'Consumption: ' + ${meterReading.consumption}"></p>
-        <p th:text="'MeterId: ' + ${meterReading.meter.id}"></p>
-        <p th:text="'MeterName: ' + ${meterReading.meter.name}"></p>
-        <hr>
-    </div>
-</th:block>
+<h3>Отчет</h3>
+<table>
+    <tr>
+        <td>Группа</td>
+        <td>min показание</td>
+        <td>max показание</td>
+        <td>Расход</td>
+    </tr>
+    <th:block th:each="group : ${readings}">
+        <tr>
+            <td th:text="${group.meterGroup.name}" colspan="4"></td>
+        </tr>
+        <tr th:each="reading : ${group.readings}">
+            <td th:text="'сч. ' + ${reading.meter.id} + ' (' + ${reading.meter.type} + ')'"></td>
+            <td th:text="${reading.minReading}"></td>
+            <td th:text="${reading.maxReading}"></td>
+            <td th:text="${reading.consumption}"></td>
+        </tr>
+        <tr>
+            <td th:text="'Итого ' + ${group.meterGroup.name} + ':'" colspan="3" ></td>
+            <td th:text="${group.consumption}"></td>
+        </tr>
+    </th:block>
+    <tr>
+        <td colspan="3">Всего:</td>
+        <td th:text="${total}"></td>
+    </tr>
+</table>
 </body>
 </html>
