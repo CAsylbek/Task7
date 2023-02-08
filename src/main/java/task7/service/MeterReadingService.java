@@ -46,7 +46,7 @@ public class MeterReadingService {
         List<MeterReading> readings = meterReadingDaoJdbcTemplate.getMaxMinReadings();
         List<ReadingReport> readingReports = new ArrayList<>();
 
-        readings.stream().forEach(r -> {
+        readings.forEach(r -> {
             Meter meter = r.getMeter();
             ReadingReport readingReport = readingReports.stream().filter(rp -> rp.getMeter().equals(meter))
                  .findFirst().orElse(null);
@@ -75,7 +75,7 @@ public class MeterReadingService {
     public List<GroupReport> getGroupReports(List<ReadingReport> readingReports) {
         List<GroupReport> groupReports = new ArrayList<>();
 
-        readingReports.stream().forEach(r -> {
+        readingReports.forEach(r -> {
             MeterGroup group = r.getMeter().getMeterGroup();
             GroupReport groupReport = groupReports.stream().filter(gr -> gr.getMeterGroup().equals(group))
                  .findFirst().orElse(null);

@@ -60,8 +60,7 @@ public class MeterReadingDaoJdbcTemplate {
              "select id, min(current_reading), time_stamp, meter " +
              "from meter_reading " +
              "group by meter";
-        List<MeterReading> readings = jdbcTemplate.query(query, meterReadingExtractor);
-        return readings;
+        return jdbcTemplate.query(query, meterReadingExtractor);
     }
 
     public MeterReading update(MeterReading meterReading) {
