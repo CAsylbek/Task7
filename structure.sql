@@ -1,4 +1,4 @@
-CREATE DATABASE `meters_data_test`;
+CREATE DATABASE `meters_data`;
 
 CREATE TABLE `meter_group` (
   `id` int NOT NULL AUTO_INCREMENT,
