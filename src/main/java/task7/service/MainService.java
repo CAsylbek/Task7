@@ -33,24 +33,30 @@ public class MainService {
 
     public MeterReadingDto postReadingFromJson(PostDataJson reportJson) throws Exception {
         MeterReading reading = new MeterReading();
-
-        System.out.println(reportJson);
-
         Long id = reportJson.getMeterId();
         Meter meter = meterDaoJdbcTemplate.getById(id);
         String type = reportJson.getType();
         String groupName = reportJson.getMeterGroup();
         List<MeterGroup> groups = meterGroupDaoJdbcTemplate.getByName(groupName);
 
-        if (!meter.getType().equals(type) || !groups.contains(meter.getMeterGroup())) {
+        if (groups.isEmpty()) {
+            MeterGroup group = new MeterGroup(groupName);
+            meterGroupDaoJdbcTemplate.save(group);
+            groups.add(meterGroupDaoJdbcTemplate.getByName(groupName).stream().findFirst().orElse(null));
+        }
+
+        if (meter == null) {
+            meter = new Meter(id, type, groups.stream().findFirst().orElse(null));
+            meterDaoJdbcTemplate.save(meter, id);
+        } else if (!meter.getType().equals(type) || !groups.contains(meter.getMeterGroup())) {
             throw new Exception("Type and group do not match");
         }
+
 
         reading.setMeter(meter);
         reading.setCurrentReading(reportJson.getCurrentReading());
         reading.setTime(reportJson.getTimeStamp());
         meterReadingDaoJdbcTemplate.save(reading);
-
         return dtoMapper.toDTO(reading);
     }
 }

@@ -10,4 +10,14 @@ public class ReadingReport {
     private int minReading;
     private int maxReading;
     private int consumption;
+
+    public ReadingReport(Meter meter, int minReading, int maxReading, int consumption) {
+        this.meter = meter;
+        this.minReading = minReading;
+        this.maxReading = maxReading;
+        this.consumption = consumption;
+    }
+
+    public ReadingReport() {
+    }
 }

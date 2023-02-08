@@ -25,8 +25,12 @@ public class MeterReadingService {
         this.dtoMapper = dtoMapper;
     }
 
-    public MeterReadingDto saveMeter(MeterReading meterReading) {
+    public MeterReadingDto save(MeterReading meterReading) {
         return dtoMapper.toDTO(meterReadingDaoJdbcTemplate.save(meterReading));
+    }
+
+    public MeterReadingDto save(MeterReading meterReading, long id) {
+        return dtoMapper.toDTO(meterReadingDaoJdbcTemplate.save(meterReading, id));
     }
 
     public MeterReadingDto findById(Long id) {

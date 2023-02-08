@@ -37,13 +37,14 @@ public class MeterReadingExtractor implements ResultSetExtractor<List<MeterReadi
             idReadingsMap.computeIfAbsent(meterId, r -> new ArrayList<>()).add(reading);
         }
 
-        List<Meter> meters = meterDaoJdbcTemplate.getListByIds(List.copyOf(idReadingsMap.keySet()));
-
-        for (Long meterId : idReadingsMap.keySet()) {
-            Meter meter = meters.stream().filter(m -> m.getId().equals(meterId)).findFirst().orElse(null);
-            for (MeterReading reading : idReadingsMap.get(meterId)) {
-                reading.setMeter(meter);
-                readings.add(reading);
+        if (!idReadingsMap.isEmpty()) {
+            List<Meter> meters = meterDaoJdbcTemplate.getListByIds(List.copyOf(idReadingsMap.keySet()));
+            for (Long meterId : idReadingsMap.keySet()) {
+                Meter meter = meters.stream().filter(m -> m.getId().equals(meterId)).findFirst().orElse(null);
+                for (MeterReading reading : idReadingsMap.get(meterId)) {
+                    reading.setMeter(meter);
+                    readings.add(reading);
+                }
             }
         }
 

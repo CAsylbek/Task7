@@ -36,13 +36,14 @@ public class MeterExtractor implements ResultSetExtractor<List<Meter>> {
             idMetersMap.computeIfAbsent(groupId, m -> new ArrayList<>()).add(meter);
         }
 
-        List<MeterGroup> groups = meterGroupDaoJdbcTemplate.getListByIds(List.copyOf(idMetersMap.keySet()));
-
-        for (Long groupId : idMetersMap.keySet()) {
-            MeterGroup group = groups.stream().filter(g -> g.getId().equals(groupId)).findFirst().orElse(null);
-            for (Meter meter : idMetersMap.get(groupId)) {
-                meter.setMeterGroup(group);
-                meters.add(meter);
+        if (!idMetersMap.isEmpty()) {
+            List<MeterGroup> groups = meterGroupDaoJdbcTemplate.getListByIds(List.copyOf(idMetersMap.keySet()));
+            for (Long groupId : idMetersMap.keySet()) {
+                MeterGroup group = groups.stream().filter(g -> g.getId().equals(groupId)).findFirst().orElse(null);
+                for (Meter meter : idMetersMap.get(groupId)) {
+                    meter.setMeterGroup(group);
+                    meters.add(meter);
+                }
             }
         }
 

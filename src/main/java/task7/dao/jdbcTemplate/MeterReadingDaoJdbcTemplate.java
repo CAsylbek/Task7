@@ -21,6 +21,15 @@ public class MeterReadingDaoJdbcTemplate {
 
     public MeterReading save(MeterReading meterReading) {
         String query = "insert into meter_reading(current_reading, time_stamp, meter) values (?, ?, ?)";
+        return saveMain(meterReading, query);
+    }
+
+    public MeterReading save(MeterReading meterReading, Long id) {
+        String query = String.format("insert into meter_reading(id, current_reading, time_stamp, meter) values (%o, ?, ?, ?)", id);
+        return saveMain(meterReading, query);
+    }
+
+    private MeterReading saveMain(MeterReading meterReading, String query) {
         Object[] args = new Object[]{
              meterReading.getCurrentReading(),
              meterReading.getTime(),
@@ -58,6 +67,7 @@ public class MeterReadingDaoJdbcTemplate {
     public MeterReading update(MeterReading meterReading) {
         String query = "update meter_reading set id=?, current_reading=?, time_stamp=?, meter=?";
         Object[] args = new Object[]{
+             meterReading.getId(),
              meterReading.getCurrentReading(),
              meterReading.getTime(),
              meterReading.getMeter().getId()};

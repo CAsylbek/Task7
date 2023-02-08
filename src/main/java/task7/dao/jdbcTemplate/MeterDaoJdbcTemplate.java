@@ -27,7 +27,16 @@ public class MeterDaoJdbcTemplate {
 
 
     public Meter save(Meter meter) {
-        String query = "insert into meter(name, meter_group) values (?, ?)";
+        String query = "insert into meter(type, meter_group) values (?, ?)";
+        return saveMain(meter, query);
+    }
+
+    public Meter save(Meter meter, Long id) {
+        String query = String.format("insert into meter(id, type, meter_group) values (%d, ?, ?)", id);
+        return saveMain(meter, query);
+    }
+
+    public Meter saveMain(Meter meter, String query) {
         Object[] args = new Object[]{
              meter.getType(),
              meter.getMeterGroup().getId()};
@@ -39,7 +48,7 @@ public class MeterDaoJdbcTemplate {
     }
 
     public List<Meter> getAll() {
-        String query = "select id, name, meter_group from meter";
+        String query = "select id, type, meter_group from meter";
         return jdbcTemplate.query(query, meterExtractor);
     }
 

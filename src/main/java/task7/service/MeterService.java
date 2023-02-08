@@ -20,8 +20,12 @@ public class MeterService {
         this.dtoMapper = dtoMapper;
     }
 
-    public MeterDto saveMeter(Meter meter) {
+    public MeterDto save(Meter meter) {
         return dtoMapper.toDTO(meterDaoJdbcTemplate.save(meter));
+    }
+
+    public MeterDto save(Meter meter, Long id) {
+        return dtoMapper.toDTO(meterDaoJdbcTemplate.save(meter, id));
     }
 
     public MeterDto findById(Long id) {

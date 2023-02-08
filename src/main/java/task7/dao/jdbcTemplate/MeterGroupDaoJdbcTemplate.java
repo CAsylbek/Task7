@@ -27,6 +27,15 @@ public class MeterGroupDaoJdbcTemplate {
 
     public MeterGroup save(MeterGroup meterGroup) {
         String query = "insert into meter_group(name) values (?)";
+        return saveMain(meterGroup, query);
+    }
+
+    public MeterGroup save(MeterGroup meterGroup, Long id) {
+        String query = String.format("insert into meter_group(id, name) values (%o, ?)", id);
+        return saveMain(meterGroup, query);
+    }
+
+    private MeterGroup saveMain(MeterGroup meterGroup, String query) {
         Object[] args = new Object[]{meterGroup.getName()};
         int out = jdbcTemplate.update(query, args);
         if (out != 0) {
