@@ -12,7 +12,7 @@ import task7.model.MeterReading;
 @Component
 public class DtoMapper {
 
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
     public DtoMapper() {
         this.modelMapper = new ModelMapper();

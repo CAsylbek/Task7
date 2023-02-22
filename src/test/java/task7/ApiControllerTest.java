@@ -2,6 +2,8 @@ package task7;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.springtestdbunit.DbUnitTestExecutionListener;
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,14 +11,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import task7.dto.PostDataJson;
-import task7.service.MeterGroupService;
-import task7.service.MeterReadingService;
-import task7.service.MeterService;
+import task7.serviceTest.MeterGroupService;
+import task7.serviceTest.MeterReadingService;
+import task7.serviceTest.MeterService;
 
 import java.sql.Timestamp;
 
@@ -28,6 +33,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestPropertySource("/application-test.properties")
+@ContextConfiguration
+@TestExecutionListeners({
+     DependencyInjectionTestExecutionListener.class,
+     DbUnitTestExecutionListener.class})
+@DatabaseSetup("meterDataTest.xml")
 public class ApiControllerTest {
 
     @Autowired
@@ -63,4 +73,6 @@ public class ApiControllerTest {
         response.andExpect(status().isOk())
              .andDo(print());
     }
+
+    @Test
 }

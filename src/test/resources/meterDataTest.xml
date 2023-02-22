@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <MeterGroup id="1" name="first group"/>
+    <MeterGroup id="2" name="second group"/>
+
+    <Meter id="1" type="meter 1">
+        <MeterGroup id="1"/>
+    </Meter>
+    <Meter id="2" type="meter 2">
+        <MeterGroup id="1"/>
+    </Meter>
+    <Meter id="3" type="meter 3">
+        <MeterGroup id="2"/>
+    </Meter>
+
+    <MeterReading id="1" currentReading="5">
+        <Meter id="1"/>
+    </MeterReading>
+    <MeterReading id="2" currentReading="13">
+        <Meter id="1"/>
+    </MeterReading>
+    <MeterReading id="3" currentReading="21">
+        <Meter id="1"/>
+    </MeterReading>
+    <MeterReading id="4" currentReading="7">
+        <Meter id="2"/>
+    </MeterReading>
+    <MeterReading id="5" currentReading="9">
+        <Meter id="3"/>
+    </MeterReading>
+    <MeterReading id="6" currentReading="22">
+        <Meter id="3"/>
+    </MeterReading>
+</dataset>

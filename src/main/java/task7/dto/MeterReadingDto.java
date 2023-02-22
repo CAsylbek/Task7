@@ -3,7 +3,6 @@ package task7.dto;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
-import task7.model.Meter;
 
 import java.sql.Timestamp;
 
@@ -17,5 +16,5 @@ public class MeterReadingDto {
     @NotEmpty
     private Timestamp time;
     @Positive
-    private Meter meter;
+    private MeterDto meter;
 }

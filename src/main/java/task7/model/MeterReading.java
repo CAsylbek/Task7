@@ -1,15 +1,23 @@
 package task7.model;
 
-import lombok.Data;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.sql.Timestamp;
 
-@Data
+@Entity
+@Setter
+@Getter
 public class MeterReading {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private int currentReading;
     private Timestamp time;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "meter_id")
     private Meter meter;
 
     public MeterReading() {

@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/changeset/create-table-meter-group.yaml
+  - include:
+      file: db/changelog/changeset/create-table-meter.yaml
+  - include:
+      file: db/changelog/changeset/create-table-meter-reading.yaml

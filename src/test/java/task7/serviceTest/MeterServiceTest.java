@@ -1,4 +1,4 @@
-package task7;
+package task7.serviceTest;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -9,15 +9,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import task7.dto.MeterDto;
-import task7.dto.MeterGroupDto;
-import task7.dto.mapper.DtoMapper;
 import task7.model.Meter;
 import task7.model.MeterGroup;
-import task7.service.MainService;
-import task7.service.MeterGroupService;
-import task7.service.MeterReadingService;
-import task7.service.MeterService;
 
 import java.util.List;
 
@@ -39,51 +32,48 @@ public class MeterServiceTest {
     private MeterGroupService meterGroupService;
     @Autowired
     private MeterReadingService meterReadingService;
-    @Autowired
-    private DtoMapper dtoMapper;
 
     private MeterGroup group;
-    private MeterGroupDto groupDto;
     private Meter meter;
-    private MeterDto meterDto;
+    private Meter meterDto2;
 
     @Before
     public void setup() {
         meterReadingService.deleteAll();
         meterService.deleteAll();
         meterGroupService.deleteAll();
-        group = new MeterGroup(1L, "group1");
-        groupDto = meterGroupService.save(group, group.getId());
-        meter = new Meter(1L, "type1", group);
-        meterDto = meterService.save(meter, meter.getId());
+        group = meterGroupService.save(new MeterGroup(1L, "group1"));
+        meterService.save(new Meter(1L, "type1", group));
+    }
+
+    @Test
+    public void myTest() throws Exception {
+        MeterGroup g = new MeterGroup("g1");
+        Meter m = new Meter("m1", g);
+        meterService.save(m);
+        System.out.println(meterGroupService.findByName("g1"));
     }
 
     @Test
     public void save() throws Exception {
         meter = new Meter(2L, "type1", group);
-        meterDto = meterService.save(meter);
-        assertEquals(meterDto, dtoMapper.toDTO(meter));
+        meterDto2 = meterService.save(meter);
+        assertEquals(meterDto2, meter);
     }
 
     @Test
     public void findById() throws Exception {
-        meterDto = meterService.findById(meter.getId());
-        assertEquals(meterDto, dtoMapper.toDTO(meter));
+        meterDto2 = meterService.findById(meter.getId());
+        assertEquals(meterDto2, meter);
     }
 
     @Test
     public void findAll() throws Exception {
-        List<MeterDto> meterDtosResponse = meterService.findAll();
-        List<MeterDto> meterDtos = List.of(dtoMapper.toDTO(meter));
-        assertEquals(meterDtosResponse, meterDtos);
+        List<Meter> metesResponse = meterService.findAll();
+        List<Meter> meters = List.of(meter);
+        assertEquals(metesResponse, meters);
     }
 
-    @Test
-    public void update() throws Exception {
-        meter.setType("newType");
-        meterDto = meterService.update(meter);
-        assertEquals(meterDto, dtoMapper.toDTO(meter));
-    }
 
     @Test
     public void deleteById() throws Exception {

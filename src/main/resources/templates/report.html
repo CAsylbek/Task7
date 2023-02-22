@@ -35,7 +35,7 @@
     </th:block>
     <tr>
         <td colspan="3">Всего:</td>
-        <td th:text="${total}"></td>
+        <td th:text="${#aggregates.sum(readings.![consumption])}"></td>
     </tr>
 </table>
 </body>

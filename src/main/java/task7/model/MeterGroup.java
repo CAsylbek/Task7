@@ -1,12 +1,23 @@
 package task7.model;
 
-import lombok.Data;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+import java.util.ArrayList;
+import java.util.List;
+
+@Setter
+@Getter
+@Entity
 public class MeterGroup {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
+    @OneToMany(mappedBy = "meterGroup", cascade = CascadeType.ALL)
+    private List<Meter> meters = new ArrayList<>();
 
     public MeterGroup() {
     }

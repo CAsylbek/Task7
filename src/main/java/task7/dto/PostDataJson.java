@@ -4,11 +4,13 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.sql.Timestamp;
 
 @Data
+@AllArgsConstructor
 public class PostDataJson {
 
     @NotNull
@@ -22,15 +24,4 @@ public class PostDataJson {
     @NotNull
     @Positive
     private int currentReading;
-
-    public PostDataJson() {
-    }
-
-    public PostDataJson(Long meterId, String type, String meterGroup, Timestamp timeStamp, int currentReading) {
-        this.meterId = meterId;
-        this.type = type;
-        this.meterGroup = meterGroup;
-        this.timeStamp = timeStamp;
-        this.currentReading = currentReading;
-    }
 }

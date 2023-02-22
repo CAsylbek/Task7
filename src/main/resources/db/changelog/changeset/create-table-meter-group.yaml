@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+    id: create-table-meter-group
+    author: asylbek
+    changes:
+      - createTable:
+          tableName: meter_group
+          columns:
+            - column:
+                name: id
+                type: int
+                autoIncrement: true
+                constrains:
+                  primaryKey: true
+                  primaryKeyName: pk_group
+                  nullable: false
+            - column:
+                name: name
+                type: varchar(45)
+                constrains:
+                  nullable: false

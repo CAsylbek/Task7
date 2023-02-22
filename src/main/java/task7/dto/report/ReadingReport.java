@@ -1,23 +1,17 @@
 package task7.dto.report;
 
-import lombok.Data;
+import lombok.*;
+import task7.dto.MeterDto;
 import task7.model.Meter;
 
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
 public class ReadingReport {
 
-    private Meter meter;
+    private MeterDto meter;
     private int minReading;
     private int maxReading;
     private int consumption;
-
-    public ReadingReport(Meter meter, int minReading, int maxReading, int consumption) {
-        this.meter = meter;
-        this.minReading = minReading;
-        this.maxReading = maxReading;
-        this.consumption = consumption;
-    }
-
-    public ReadingReport() {
-    }
 }
