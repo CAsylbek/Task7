@@ -10,9 +10,9 @@ import task7.dto.mapper.DtoMapper;
 import task7.model.Meter;
 import task7.model.MeterGroup;
 import task7.model.MeterReading;
-import task7.serviceTest.MeterGroupService;
-import task7.serviceTest.MeterReadingService;
-import task7.serviceTest.MeterService;
+import task7.service.MeterGroupService;
+import task7.service.MeterReadingService;
+import task7.service.MeterService;
 
 import java.util.List;
 

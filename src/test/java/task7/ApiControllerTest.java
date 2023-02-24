@@ -19,9 +19,9 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import task7.dto.PostDataJson;
-import task7.serviceTest.MeterGroupService;
-import task7.serviceTest.MeterReadingService;
-import task7.serviceTest.MeterService;
+import task7.service.MeterGroupService;
+import task7.service.MeterReadingService;
+import task7.service.MeterService;
 
 import java.sql.Timestamp;
 
@@ -74,5 +74,5 @@ public class ApiControllerTest {
              .andDo(print());
     }
 
-    @Test
+
 }

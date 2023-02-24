@@ -1,4 +1,4 @@
-package task7.serviceTest;
+package task7.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;

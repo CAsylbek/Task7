@@ -9,6 +9,7 @@ import java.sql.Timestamp;
 @Entity
 @Setter
 @Getter
+@Table(name = "meter_reading", schema = "meters_data_8_test")
 public class MeterReading {
 
     @Id

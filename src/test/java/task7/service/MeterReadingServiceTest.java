@@ -1,4 +1,4 @@
-package task7.serviceTest;
+package task7.service;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -9,8 +9,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import task7.model.Meter;
 import task7.model.MeterGroup;
+import task7.model.MeterReading;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -19,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestPropertySource("/application-test.properties")
-public class MeterGroupServiceTest {
+public class MeterReadingServiceTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -33,45 +36,52 @@ public class MeterGroupServiceTest {
     private MeterReadingService meterReadingService;
 
     private MeterGroup group;
-    private MeterGroup group2;
+    private Meter meter;
+    private MeterReading meterReading;
+    private MeterReading meterReading2;
+    private Timestamp time = new Timestamp(2023, 1, 1, 1, 30, 0, 0);
 
     @Before
     public void setup() {
         meterReadingService.deleteAll();
         meterService.deleteAll();
         meterGroupService.deleteAll();
-        group = meterGroupService.save(new MeterGroup( "group1"));
+        group = meterGroupService.save(new MeterGroup(1L, "group1"));
+        meter = new Meter(1L, "type1", group);
+        meterService.save(meter);
+        meterReading = new MeterReading(1L, 15, time, meter);
+        meterReadingService.save(meterReading);
     }
 
     @Test
     public void save() throws Exception {
-        group = new MeterGroup( "group1");
-        group2 = meterGroupService.save(group);
-        assertEquals(group2, group);
+        meterReading = new MeterReading(2L, 20, time, meter);
+        meterReading2 = meterReadingService.save(meterReading);
+        assertEquals(meterReading2, meterReading);
     }
 
     @Test
     public void findById() throws Exception {
-        group2 = meterGroupService.findById(group.getId());
-        assertEquals(group2, group);
+        meterReading2 = meterReadingService.findById(meterReading.getId());
+        assertEquals(meterReading2, meterReading);
     }
 
     @Test
     public void findAll() throws Exception {
-        List<MeterGroup> groupsResponse = meterGroupService.findAll();
-        List<MeterGroup> groups = List.of(group);
-        assertEquals(groupsResponse, groups);
+        List<MeterReading> meterReadingsResponse = meterReadingService.findAll();
+        List<MeterReading> meterReadings = List.of(meterReading);
+        assertEquals(meterReadingsResponse, meterReadings);
     }
 
     @Test
     public void deleteById() throws Exception {
-        meterGroupService.deleteById(group.getId());
-        assertEquals(meterGroupService.findAll().size(), 0);
+        meterReadingService.deleteById(meterReading.getId());
+        assertEquals(meterReadingService.findAll().size(), 0);
     }
 
     @Test
     public void deleteAll() throws Exception {
-        meterGroupService.deleteAll();
-        assertEquals(meterGroupService.findAll().size(), 0);
+        meterReadingService.deleteById(meterReading.getId());
+        assertEquals(meterReadingService.findAll().size(), 0);
     }
 }

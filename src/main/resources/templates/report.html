@@ -38,5 +38,10 @@
         <td th:text="${#aggregates.sum(readings.![consumption])}"></td>
     </tr>
 </table>
+
+<form action="/report" method="POST" enctype="multipart/form-data">
+    <input type="file" name="file"/>
+    <input type="submit" value="Отправить"/>
+</form>
 </body>
 </html>

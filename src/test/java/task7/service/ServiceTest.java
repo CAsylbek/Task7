@@ -1,4 +1,4 @@
-package task7.serviceTest;
+package task7.service;
 
 import org.junit.Before;
 import org.junit.Test;

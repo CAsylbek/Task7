@@ -9,7 +9,7 @@ import task7.dto.MeterReadingDto;
 import task7.dto.PostDataJson;
 import task7.dto.mapper.DtoMapper;
 import task7.dto.report.GroupReport;
-import task7.serviceTest.MainService;
+import task7.service.MainService;
 
 import java.util.List;
 

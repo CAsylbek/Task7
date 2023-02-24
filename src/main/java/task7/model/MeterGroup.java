@@ -10,6 +10,7 @@ import java.util.List;
 @Setter
 @Getter
 @Entity
+@Table(name = "meter_group", schema = "meters_data_8_test")
 public class MeterGroup {
 
     @Id

@@ -1,34 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
-    <MeterGroup id="1" name="first group"/>
-    <MeterGroup id="2" name="second group"/>
+    <meter_group id="1" name="first group"/>
+    <meter_group id="2" name="second group"/>
 
-    <Meter id="1" type="meter 1">
-        <MeterGroup id="1"/>
-    </Meter>
-    <Meter id="2" type="meter 2">
-        <MeterGroup id="1"/>
-    </Meter>
-    <Meter id="3" type="meter 3">
-        <MeterGroup id="2"/>
-    </Meter>
+    <meter id="1" type="meter 1" meter_group_id="1"/>
+    <meter id="2" type="meter 2" meter_group_id="1"/>
+    <meter id="3" type="meter 3" meter_group_id="2"/>
 
-    <MeterReading id="1" currentReading="5">
-        <Meter id="1"/>
-    </MeterReading>
-    <MeterReading id="2" currentReading="13">
-        <Meter id="1"/>
-    </MeterReading>
-    <MeterReading id="3" currentReading="21">
-        <Meter id="1"/>
-    </MeterReading>
-    <MeterReading id="4" currentReading="7">
-        <Meter id="2"/>
-    </MeterReading>
-    <MeterReading id="5" currentReading="9">
-        <Meter id="3"/>
-    </MeterReading>
-    <MeterReading id="6" currentReading="22">
-        <Meter id="3"/>
-    </MeterReading>
+    <meter_reading id="1" current_reading="5" meter_id="1"/>
+    <meter_reading id="2" current_reading="13" meter_id="1"/>
+    <meter_reading id="3" current_reading="21" meter_id="1"/>
+    <meter_reading id="4" current_reading="7" meter_id="2"/>
+    <meter_reading id="5" current_reading="9" meter_id="3"/>
+    <meter_reading id="6" current_reading="22" meter_id="3"/>
 </dataset>

@@ -1,4 +1,4 @@
-package task7.serviceTest;
+package task7.service;
 
 import lombok.AllArgsConstructor;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -14,11 +14,14 @@ import task7.dto.mapper.DtoMapper;
 import task7.dto.report.GroupReport;
 import task7.dto.report.ReadingReport;
 import task7.model.Meter;
+import task7.model.MeterGroup;
 import task7.model.MeterReading;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -26,6 +29,7 @@ import java.util.List;
 public class MainService {
 
     private final MeterService meterService;
+    private final MeterGroupService meterGroupService;
     private final MeterReadingService meterReadingService;
     private final DtoMapper dtoMapper;
 
@@ -65,7 +69,6 @@ public class MainService {
 //            Group name
             Row groupRow = sheet.createRow(++row);
             groupRow.createCell(0).setCellValue(groupReport.getMeterGroup().getName());
-            sheet.addMergedRegion(new CellRangeAddress(row, row, 0, 3));
 //            Readings
             List<ReadingReport> readings = groupReport.getReadings();
             for (ReadingReport readingReport : readings) {
@@ -81,13 +84,11 @@ public class MainService {
             groupTotalRow.createCell(0).setCellValue(String.format("Итого %s:", groupReport.getMeterGroup().getName()));
             groupTotalRow.createCell(3).setCellValue(groupReport.getConsumption());
             totalConsumption += groupReport.getConsumption();
-            sheet.addMergedRegion(new CellRangeAddress(row, row, 0, 2));
         }
 //        Total
         Row totalRow = sheet.createRow(++row);
         totalRow.createCell(0).setCellValue("Всего:");
         totalRow.createCell(3).setCellValue(totalConsumption);
-        sheet.addMergedRegion(new CellRangeAddress(row, row, 0, 2));
 
 //        Style
         PropertyTemplate propertyTemplate = new PropertyTemplate();
@@ -104,6 +105,43 @@ public class MainService {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         workbook.write(outputStream);
         return new ByteArrayResource(outputStream.toByteArray());
+    }
+
+    //todo: test
+    public void excelFileToGroupReport(ByteArrayResource byteArrayResource) {
+        MeterGroup group = null;
+        try {
+            Workbook book = WorkbookFactory.create(new ByteArrayInputStream(byteArrayResource.getByteArray()));
+            Sheet sheet = book.getSheetAt(0);
+            Row row = null;
+            Iterator<Row> rowIterator = sheet.rowIterator();
+            rowIterator.next();
+            while (rowIterator.hasNext()) {
+                row = rowIterator.next();
+                if (row.getCell(2).getNumericCellValue() != 0 && row.getCell(3).getNumericCellValue() != 0) {
+                    String meterId = row.getCell(0).getStringCellValue().split(" ")[1];
+                    Meter meter = meterService.findById(Long.parseLong(meterId));
+                    int min = (int) row.getCell(1).getNumericCellValue();
+                    int max = (int) row.getCell(2).getNumericCellValue();
+
+                    MeterReading minReading = new MeterReading();
+                    minReading.setMeter(meter);
+                    minReading.setCurrentReading(min);
+
+                    MeterReading maxReading = new MeterReading();
+                    maxReading.setMeter(meter);
+                    maxReading.setCurrentReading(max);
+
+                    meterReadingService.save(maxReading);
+                    meterReadingService.save(minReading);
+                } else {
+                    String name = row.getCell(0).getStringCellValue();
+                    group = meterGroupService.findByName(name).stream().findFirst().orElse(null);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     //todo: test
