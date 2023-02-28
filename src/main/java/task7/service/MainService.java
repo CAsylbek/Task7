@@ -1,5 +1,6 @@
 package task7.service;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
@@ -20,6 +21,8 @@ import task7.model.MeterReading;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -52,7 +55,8 @@ public class MainService {
     }
 
     //todo: test
-    public ByteArrayResource groupRepostToExcelFile(List<GroupReport> groupReports) throws IOException {
+    @Transactional
+    public ByteArrayResource groupRepostToExcel(List<GroupReport> groupReports) throws IOException {
         Workbook workbook = new HSSFWorkbook();
         Sheet sheet = workbook.createSheet();
         int row = 0;
@@ -107,40 +111,50 @@ public class MainService {
         return new ByteArrayResource(outputStream.toByteArray());
     }
 
-    //todo: test
-    public void excelFileToGroupReport(ByteArrayResource byteArrayResource) {
+    public void saveExcelAsMeterReading(ByteArrayResource byteArrayResource) throws IOException {
         MeterGroup group = null;
-        try {
-            Workbook book = WorkbookFactory.create(new ByteArrayInputStream(byteArrayResource.getByteArray()));
-            Sheet sheet = book.getSheetAt(0);
-            Row row = null;
-            Iterator<Row> rowIterator = sheet.rowIterator();
-            rowIterator.next();
-            while (rowIterator.hasNext()) {
-                row = rowIterator.next();
-                if (row.getCell(2).getNumericCellValue() != 0 && row.getCell(3).getNumericCellValue() != 0) {
-                    String meterId = row.getCell(0).getStringCellValue().split(" ")[1];
-                    Meter meter = meterService.findById(Long.parseLong(meterId));
-                    int min = (int) row.getCell(1).getNumericCellValue();
-                    int max = (int) row.getCell(2).getNumericCellValue();
+        Workbook book = WorkbookFactory.create(new ByteArrayInputStream(byteArrayResource.getByteArray()));
+        Sheet sheet = book.getSheetAt(0);
+        Row row = null;
+        Iterator<Row> rowIterator = sheet.rowIterator();
+        rowIterator.next();
+        while (rowIterator.hasNext()) {
+            row = rowIterator.next();
+            if (row.getCell(2).getNumericCellValue() != 0 && row.getCell(3).getNumericCellValue() != 0) {
+                String type = row.getCell(0).getStringCellValue().split("\\(|\\)")[1];
 
-                    MeterReading minReading = new MeterReading();
-                    minReading.setMeter(meter);
-                    minReading.setCurrentReading(min);
+                MeterGroup finalGroup = group;
+                Meter meter = meterService.findByType(type).stream()
+                     .filter(m -> finalGroup.getName().equals(m.getMeterGroup().getName()))
+                     .findFirst().orElse(null);
+                if (meter == null) {
+                    meter = meterService.save(new Meter(type, group));
+                }
 
-                    MeterReading maxReading = new MeterReading();
-                    maxReading.setMeter(meter);
-                    maxReading.setCurrentReading(max);
+                int min = (int) row.getCell(1).getNumericCellValue();
+                int max = (int) row.getCell(2).getNumericCellValue();
 
-                    meterReadingService.save(maxReading);
-                    meterReadingService.save(minReading);
-                } else {
-                    String name = row.getCell(0).getStringCellValue();
-                    group = meterGroupService.findByName(name).stream().findFirst().orElse(null);
+                Timestamp now = Timestamp.valueOf(LocalDateTime.now());
+
+                MeterReading minReading = new MeterReading();
+                minReading.setMeter(meter);
+                minReading.setTime(now);
+                minReading.setCurrentReading(min);
+
+                MeterReading maxReading = new MeterReading();
+                maxReading.setMeter(meter);
+                maxReading.setTime(now);
+                maxReading.setCurrentReading(max);
+
+                meterReadingService.save(maxReading);
+                meterReadingService.save(minReading);
+            } else if (row.getCell(3).getNumericCellValue() == 0) {
+                String name = row.getCell(0).getStringCellValue();
+                group = meterGroupService.findByName(name).stream().findFirst().orElse(null);
+                if (group == null) {
+                    group = meterGroupService.save(new MeterGroup(name));
                 }
             }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
         }
     }
 

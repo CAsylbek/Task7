@@ -13,12 +13,13 @@ import java.sql.Timestamp;
 public class MeterReading {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
     private Long id;
     private int currentReading;
     private Timestamp time;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "meter_id")
+    @JoinColumn(name = "METER_ID")
     private Meter meter;
 
     public MeterReading() {

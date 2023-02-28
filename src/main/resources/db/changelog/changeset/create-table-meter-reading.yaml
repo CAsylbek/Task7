@@ -1,33 +1,32 @@
 databaseChangeLog:
   - changeSet:
-    id: create-table-meter-reading
-    author: asylbek
-    changes:
-      - createTable:
-          tableName: meter_reading
-          columns:
-            - column:
-                name: id
-                type: int
-                autoIncrement: true
-                constrains:
-                  primaryKey: true
-                  primaryKeyName: meter_pk
-                  nullable: false
-            - column:
-                name: current_reading
-                type: int
-                constrains:
-                  nullable: false
-            - column:
-                name: time_stamp
-                type: datetime
-                constrains:
-                  nullable: false
-            - column:
-                name: meter
-                type: int
-                constrains:
-                  nullable: false
-                  foreignKeyName: fk_meter
-                  references: meter(id)
+      id: create-table-meter-reading
+      author: asylbek
+      changes:
+        - createTable:
+            tableName: meter_reading
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: meter_pk
+              - column:
+                  name: current_reading
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: time
+                  type: datetime(6)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: meter_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_meter
+                    references: meter(id)

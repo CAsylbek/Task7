@@ -37,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestExecutionListeners({
      DependencyInjectionTestExecutionListener.class,
      DbUnitTestExecutionListener.class})
-@DatabaseSetup("meterDataTest.xml")
+@DatabaseSetup("dbunitSource/meterData.xml")
 public class ApiControllerTest {
 
     @Autowired

@@ -1,28 +1,27 @@
 databaseChangeLog:
   - changeSet:
-    id: create-table-meter
-    author: asylbek
-    changes:
-      - createTable:
-          tableName: meter
-          columns:
-            - column:
-                name: id
-                type: int
-                autoIncrement: true
-                constrains:
-                  primaryKey: true
-                  primaryKeyName: pk_meter
-                  nullable: false
-            - column:
-                name: type
-                type: varchar(45)
-                constrains:
-                  nullable: false
-            - column:
-                name: meter_group
-                type: int
-                constrains:
-                  nullable: false
-                  foreignKeyName: fk_meter_group
-                  references: meter_group(id)
+      id: create-table-meter
+      author: asylbek
+      changes:
+        - createTable:
+            tableName: meter
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_meter
+              - column:
+                  name: type
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: meter_group_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_meter_group
+                    references: meter_group(id)

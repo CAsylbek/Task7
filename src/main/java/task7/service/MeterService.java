@@ -22,6 +22,10 @@ public class MeterService {
         return meterRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
+    public List<Meter> findByType(String type) {
+        return meterRepository.findByType(type);
+    }
+
     public List<Meter> findAll() {
         return meterRepository.findAll();
     }

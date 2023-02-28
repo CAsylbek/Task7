@@ -14,7 +14,8 @@ import java.util.List;
 public class MeterGroup {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
     private Long id;
     private String name;
     @OneToMany(mappedBy = "meterGroup", cascade = CascadeType.ALL)

@@ -14,11 +14,12 @@ import java.util.List;
 public class Meter {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
     private Long id;
     private String type;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "meter_group_id")
+    @JoinColumn(name = "METER_GROUP_ID")
     private MeterGroup meterGroup;
     @OneToMany(mappedBy = "meter", cascade = CascadeType.ALL)
     private List<MeterReading> meterReadings = new ArrayList<>();
