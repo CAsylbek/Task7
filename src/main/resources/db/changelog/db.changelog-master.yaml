@@ -1,7 +1,17 @@
 databaseChangeLog:
+
+# Create
   - include:
-      file: db/changelog/changeset/create-table-meter-group.yaml
+      file: db/changelog/changesetCreate/create-table-meter-group.yaml
   - include:
-      file: db/changelog/changeset/create-table-meter.yaml
+      file: db/changelog/changesetCreate/create-table-meter.yaml
   - include:
-      file: db/changelog/changeset/create-table-meter-reading.yaml
+      file: db/changelog/changesetCreate/create-table-meter-reading.yaml
+  - include:
+      file: db/changelog/changesetCreate/create-table-user.yaml
+  - include:
+      file: db/changelog/changesetCreate/create-table-role.yaml
+
+# Add
+  - include:
+      file: db/changelog/changesetAdd/add-user_role.yaml

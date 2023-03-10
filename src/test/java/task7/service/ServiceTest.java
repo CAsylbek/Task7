@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class ServiceTest extends AbstractTest {
 
     @Autowired
-    private MainService mainService;
+    private GroupReportService groupReportService;
     @Autowired
     private MeterService meterService;
     @Autowired
@@ -37,7 +37,7 @@ public class ServiceTest extends AbstractTest {
 
         PostDataJson postDataJson = new PostDataJson(
              10L, "type10", "group10", time, 15);
-        MeterReading readingDtoResponse = mainService.postReadingFromJson(postDataJson);
+        MeterReading readingDtoResponse = groupReportService.postReadingFromJson(postDataJson);
 
         MeterGroup group = meterGroupService.findByName("group10").stream().findFirst().orElse(null);
 
@@ -52,7 +52,7 @@ public class ServiceTest extends AbstractTest {
     @Test
     public void excelFileToGroupReport() throws IOException {
         byte[] bytes = Files.readAllBytes(Paths.get("src/test/resources/dbunitSource/report.xls"));
-        mainService.saveExcelAsMeterReading(new ByteArrayResource(bytes));
+        groupReportService.saveExcelAsMeterReading(new ByteArrayResource(bytes));
         List<MeterReading> readings = meterReadingService.findAll();
 
         List<Meter> meters = meterService.findAll();

@@ -1,0 +1,80 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+</head>
+<style>
+    td {
+    border: 1px solid black;
+    }
+</style>
+<body>
+
+<h3>Пользователи</h3>
+
+<form action="/users" method="POST">
+    <input type="text" name="username" placeholder="username"/><br>
+    <input type="text" name="password" placeholder="password"/><br>
+    <label>Роль</label><br>
+    <select multiple name="role">
+        <option th:each="role : ${roles}" th:value="${role}" th:text="${role}"></option>
+    </select><br>
+    <input type="submit" value="Добавить">
+</form>
+
+<table>
+    <tr>
+        <td>id</td>
+        <td>Имя пользователя</td>
+        <td>Пароль</td>
+        <td>Роль</td>
+        <td></td>
+        <td></td>
+    </tr>
+    <th:block th:each="user : ${users}">
+
+        <tr>
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.username}"></td>
+            <td th:text="${user.password}"></td>
+            <td>
+                <th:block th:each="role : ${user.roles}">
+                    <p th:text="${role}"></p>
+                </th:block>
+            </td>
+            <td>
+                <form th:action="@{/users}" method="GET">
+                    <input type="hidden" name="id" th:value="${user.id}">
+                    <input type="submit" value="Изменить">
+                </form>
+            </td>
+            <td>
+                <form th:action="@{/users/delete/__${user.id}__}" method="POST">
+                    <input type="submit" value="Удалить">
+                </form>
+            </td>
+        </tr>
+
+        <th:block th:if="${updateUserId == user.id}">
+            <form action="/users" method="POST">
+                <tr>
+                    <td th:text="${user.id}"></td>
+                    <input type="text" name="id" th:value="${user.id}"/>
+                    <td><input type="text" name="username" placeholder="username" th:value="${user.username}"/></td>
+                    <td><input type="text" name="password" placeholder="password"/></td>
+                    <td>
+                        <select multiple name="role">
+                            <option th:each="role : ${roles}" th:value="${role}" th:text="${role}"></option>
+                        </select>
+                    </td>
+                    <td><input type="submit" value="Сохранить"></td>
+                    <td></td>
+                </tr>
+            </form>
+        </th:block>
+
+    </th:block>
+</table>
+</body>
+</html>

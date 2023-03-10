@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-user
+      author: asylbek
+      changes:
+        - insert:
+            tableName: user
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: username
+                  value: admin
+              - column:
+                  name: password
+                  value: $2a$12$YR8udTdD5fnzN1IUc1zMRO2mAtg8VWnipEpKGdO7.VMYwaRoj3USO
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: user_id
+                  value: 1
+              - column:
+                  name: role
+                  value: ADMIN

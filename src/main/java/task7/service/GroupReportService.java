@@ -8,6 +8,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.PropertyTemplate;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import task7.dto.MeterDto;
 import task7.dto.MeterGroupDto;
 import task7.dto.PostDataJson;
@@ -29,7 +30,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class MainService {
+public class GroupReportService {
 
     private final MeterService meterService;
     private final MeterGroupService meterGroupService;
@@ -56,7 +57,9 @@ public class MainService {
 
     //todo: test
     @Transactional
-    public ByteArrayResource groupRepostToExcel(List<GroupReport> groupReports) throws IOException {
+    public ByteArrayResource groupRepostToExcel() throws IOException {
+        List<GroupReport> groupReports = getGroupReports();
+
         Workbook workbook = new HSSFWorkbook();
         Sheet sheet = workbook.createSheet();
         int row = 0;
@@ -109,6 +112,10 @@ public class MainService {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         workbook.write(outputStream);
         return new ByteArrayResource(outputStream.toByteArray());
+    }
+
+    public void saveExcelAsMeterReading(MultipartFile excelFile) throws IOException {
+        saveExcelAsMeterReading(new ByteArrayResource(excelFile.getBytes()));
     }
 
     public void saveExcelAsMeterReading(ByteArrayResource byteArrayResource) throws IOException {
@@ -192,7 +199,8 @@ public class MainService {
     }
 
     //todo: test
-    public List<GroupReport> getGroupReports(List<ReadingReport> readingReports) {
+    public List<GroupReport> getGroupReports() {
+        List<ReadingReport> readingReports = getReadingReports();
         List<GroupReport> groupReports = new ArrayList<>();
 
         readingReports.forEach(r -> {
